@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/style.css">
+    <title>Home</title>
 </head>
 <body class="container" style="margin-top: 50px;">
     <h1>Welcome<%= user ? `, ${user.username}` : '' %>!</h1>
     <% if (user) { %>
-        <p><a href="/manage-events">Manage Events</a></p>
-        <p><a href="/logout">Logout</a></p>
+        <p><a href="/manage-events" class="btnprimary">Manage Events</a></p>
+        <p><a href="/logout" class="btndanger">Logout</a></p>
     <% } else { %>
-        <p><a href="/login">Login</a></p>
-        <p><a href="/register">Register</a></p>
+        <p><a href="/login" class="btnprimary">Login</a></p>
+        <p><a href="/register" class="btnprimary">Register</a></p>
     <% } %>
 </body>
 </html>

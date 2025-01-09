@@ -1,0 +1,35 @@
+.btn-primary{
+    background-color: lightpink !important;
+    color: black !important;
+}
+
+.btn-secondary {
+    background-color: black !important;
+    color: lightpink !important;
+}
+
+.btn-danger {
+    color: lightpink !important;
+    background-color: hotpink !important;
+}
+
+.btnprimary {
+    color: lightpink !important;
+}
+
+.btndanger {
+    color: hotpink !important;
+}
+
+.input-box {
+    background-color: lightblue !important;
+}
+
+.input {
+    background-color: lightblue !important;
+    color: black;
+}
+
+.justified-text {
+    text-align: justify;
+}

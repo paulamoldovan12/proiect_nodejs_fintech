@@ -5,24 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Events</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/style.css">
 </head>
 
 <body class="container" style="margin-top: 50px;">
     <h1>Manage Events</h1>
-    <p><a href="/">Home</a></p>
-    <p><a href="/logout">Logout</a></p>
+    <p><a href="/" class="btnprimary">Home</a></p>
+    <p><a href="/logout" class="btndanger">Logout</a></p>
     <h2>Events</h2>
     <ul class="list-group">
         <% events.forEach(event => { %>
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <%= event.title %> - <%= event.description %>
                 <span class="btn-group">
-                    <a href="/edit-event/<%= event.id %>" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="/delete-event/<%= event.id %>" class="btn btn-danger btn-sm" onclick = "return confirm('Are you sure want to delete this record?')">Delete</a>
+                    <a href="/view-event/<%= event.id %>" class="btn btnprimary btn-sm">View</a>
+                    <a href="/edit-event/<%= event.id %>" class="btn btnprimary btn-sm">Edit</a>
+                    <a href="/delete-event/<%= event.id %>" class="btn btndanger btn-sm" onclick = "return confirm('Are you sure want to delete this record?')">Delete</a>
                 </span>
             </li>
         <% }); %>
     </ul>
-    <p><a href="/add-event" class="btn btn-success mt-3">Add Event</a></p>
+    <p><a href="/add-event" class="btn btn-primary mt-3">Add Event</a></p>
 </body>
 </html>

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const pool = require('../db');
 const router = express.Router();
+const {getEventsSortedByDate} = require('../modules/event'); //import function that sorts by date
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -127,6 +128,31 @@ router.post('/delete-event/:id', isLoggedIn, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Error deleting event');
+    }
+});
+
+router.get('/events/sort', async (req, res) => {
+    //route to fetch events sorted by price
+    try {
+        const {order} = req.query; //retrieve the sorting order ('ASC' or 'DESC')
+        const sortedEvents = await getEventsSortedByDate(order || 'ASC'); //default to ascending order
+        res.render('manage-events', { events: sortedEvents }); //render the view with sorted events
+    } catch (error) {
+        console.error(error); //log error if existing
+        res.status(500).send('Failed to fetch events');
+    }
+});
+
+router.get('/view-event/:id', isLoggedIn, async (req, res) => {
+    //route to view details of a specific event
+    const eventId = req.params.id; //extract the event ID from the URL
+    try {
+        const [eventRows] = await pool.query('SELECT * FROM events WHERE id = ?', [eventId]); //fetch the event details by ID
+        const event = eventRows[0]; //get the first result (event object)
+        res.render('view-event', { event }); //render the view-event page with the event details
+    } catch (error) {
+        console.error('Error fetching event details:', error); //log error if existing
+        res.status(500).send('An error occurred while fetching the event details.');
     }
 });
 

@@ -1,8 +1,7 @@
 const pool = require('../db');
 const createEvent = async (event) => {
     const {title, description, event_date, location, max_participants} = event;
-    const [result] = await pool.query('INSERT INTO events (title, description, event_date, location, max_participants) VALUES (?, ?, ?, ?, ?)',
-        [title, description, event_date, location, max_participants]);
+    const [result] = await pool.query('INSERT INTO events (title, description, event_date, location, max_participants) VALUES (?, ?, ?, ?, ?)', [title, description, event_date, location, max_participants]);
     return result.insertId;
 };
 const getAllEvents = async () => {
@@ -23,4 +22,9 @@ const deleteEvent = async (eventId) => {
     return true;
 };
 
-module.exports = {createEvent, getAllEvents, getEventById, updateEvent, deleteEvent};
+const getEventsSortedByDate = async (order = 'ASC') => {
+    const [rows] = await pool.query(`SELECT * FROM events ORDER BY event_date ${order}`);
+    return rows;
+}
+
+module.exports = {createEvent, getAllEvents, getEventById, updateEvent, deleteEvent, getEventsSortedByDate};
