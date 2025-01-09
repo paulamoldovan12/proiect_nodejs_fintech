@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3000;//define the port for the server to run on
 require('./auth'); //ensures Passport is configured
 
 app.set('view engine', 'ejs'); //set EJS as the view engine
+app.use(express.static('styles'));
 
 app.use(express.urlencoded({extended: true})); //middleware to parse URL-encoded data from incoming requests (ex: form submission)
 app.use(session({ //middleware to configure session management

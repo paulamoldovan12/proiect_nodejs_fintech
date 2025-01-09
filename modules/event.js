@@ -22,9 +22,23 @@ const deleteEvent = async (eventId) => {
     return true;
 };
 
+// const getEventsSortedByDate = async (order = 'ASC') => {
+//     const [rows] = await pool.query(`SELECT * FROM events ORDER BY event_date ${order}`);
+//     return rows;
+// }
+
 const getEventsSortedByDate = async (order = 'ASC') => {
-    const [rows] = await pool.query(`SELECT * FROM events ORDER BY event_date ${order}`);
+    // Validează ordinea (acceptă doar 'ASC' sau 'DESC')
+    const sortOrder = order.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+
+    // Rulează interogarea SQL
+    const [rows] = await pool.query(`
+        SELECT * FROM events 
+        ORDER BY event_date ${sortOrder}
+    `);
+
     return rows;
-}
+};
+
 
 module.exports = {createEvent, getAllEvents, getEventById, updateEvent, deleteEvent, getEventsSortedByDate};
