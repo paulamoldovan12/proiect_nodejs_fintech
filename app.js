@@ -1,29 +1,29 @@
-//SET UP THE MAIN EXPRESS APPLICATION AND STARTS THE SERVER
+// configurare aplicatie express principala si pornirea serverului
 
-const express = require('express'); //import the express framework for building the web server
-const session = require('express-session'); //import express-session for managing user sessions
-const passport = require('passport'); //import passport.js for user authentication
-const routes = require('./routes'); //import the routes defined in the routes folder
-const app = express(); //initialize an express application
-const PORT = process.env.PORT || 3000;//define the port for the server to run on (default to 3000 if not set)
+const express = require('express'); // importa framework ul express pt construirea serverului web
+const session = require('express-session'); // importa express-session pt gestionarea sesiunilor utilizatorilor
+const passport = require('passport'); // importa Passport.js pt autentificarea utilizatorilor
+const routes = require('./routes'); // importa rutele def în folderul routes
+const app = express(); // initializeaza o aplicatie express
+const PORT = process.env.PORT || 3000; // defi portul pe care va rula serverul (implicit 3000 daca nu este setat altfel)
 
-require('./auth'); //ensures Passport is configured
+require('./auth'); // se asigura ca passport este configurat
 
-app.set('view engine', 'ejs'); //set EJS as the view engine
-app.use(express.static('styles'));
+app.set('view engine', 'ejs'); // seteaza EJS ca motor de randare pentru vizualizari
+app.use(express.static('styles')); // serveste fisiere statice din folderul styles
 
-app.use(express.urlencoded({extended: true})); //middleware to parse URL-encoded data from incoming requests (ex: form submission)
-app.use(session({ //middleware to configure session management
-    secret: 'secret', //session encryption secret key
-    resave: false, //do not save session if not modified
-    saveUninitialized: false //do not save uninitialized sessions
+app.use(express.urlencoded({extended: true})); // middleware pt parsarea datelor codate URL din cererile primite (trimiterea formularelor)
+app.use(session({ // middleware pt configurarea gestionarii sesiunilor
+    secret: 'secret', // cheia secretă pentru criptarea sesiunilor
+    resave: false, // nu salveaza sesiunea daca nu a fost modificata
+    saveUninitialized: false // nu salveaza sesiunile neinitializate
 }));
-app.use(passport.initialize()); //initialize passport.js middleware for handling authentication
-app.use(passport.session()); //enable persistent login sessions with passport.js
-app.use(express.static('public')); //serve CSS file from the public directory
-app.use('/', routes); //use the imported routes for handling application routes
+app.use(passport.initialize()); // initializeaza middleware-ul Passport.js pt gestionarea autentificarii
+app.use(passport.session()); // permite utilizarea sesiunilor persistente pt autentificare cu Passport.js
+app.use(express.static('public')); // serveste fisiere statice (CSS, imagini) din folderul public
+app.use('/', routes); // foloseste rutele importate pt gestionarea rutelor aplicatiei
 
 app.listen(PORT, () => {
-    //start the server on the specified port
-    console.log('Server is running on http://localhost:${PORT}'); //log a message indicating the server is running
+    // porneste serverul pe portul specific
+    console.log('Server is running on http://localhost:${PORT}'); // afiseaza un mesaj care indica ca serverul ruleaza
 });

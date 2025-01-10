@@ -1,41 +1,41 @@
-//CONFIGURE PASSPORT.JS FOR AUTHENTICATION USING A LOCAL STRATEGY
-//INCLUDE LOGIC FOR VALIDATING USERS, SERIALIZING USER DATA INTO SESSION AND DESERIALIZING USER DATA FROM SESSIONS
+// configurare passport.js pt autentificare utiliz strategia locala
+// include logica pt validarea userilor , serializarea datelor userului in sesiune si deserializarea datelor userului din sesiuni
 
-const passport = require('passport'); //import passport.js for user authentication
-const LocalStrategy = require('passport-local').Strategy; //import the local authentication strategy for passport.js
-const bcrypt = require('bcrypt'); //import bcrypt for hashing and comparing passwords
-const pool = require("./db"); //import the database connection pool for querying the database
+const passport = require('passport'); // importa passport.js pt autentificarea utilizatorilor
+const LocalStrategy = require('passport-local').Strategy; // importa strategia de autentificare locala pt passport.js
+const bcrypt = require('bcrypt'); // importa bcrypt pt hash uirea si compararea parolelor
+const pool = require("./db"); // importa conexiunea la baza de date pt efectuarea interogarilor
 
 passport.use(new LocalStrategy(async (username, password, done) => {
-    //define the passport.js local strategy for authentication
+    // def strategia locala a passport.js pt autentificare
     try {
-        const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]); //query the database for a user with the given username
-        const user = rows[0]; //get the first matching user
+        const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]); // interogheaza db pt a gasi un user cu username ul dat
+        const user = rows[0]; // preia primul user gasit
         if (!user) {
-            return done(null, false, {message: 'Incorrect username.'}); //return an error message if the user is not found
+            return done(null, false, {message: 'Incorrect username.'}); // returneaza un mesaj de eroare daca userul nu e gasit
         }
-        const passwordMatch = await bcrypt.compare(password, user.password); //compare the provided password with the hashed password in the database
+        const passwordMatch = await bcrypt.compare(password, user.password); // compara parola introdusa cu parola hash uita din db
         if (!passwordMatch) {
-            return done(null, false, {message: 'Incorrect password.'}); //return an error message if the password is incorrect
+            return done(null, false, {message: 'Incorrect password.'}); // returneaza un mesaj de eroare daca parola e gresita
         }
-        return done(null, user); //if authentication is successful, return the user
+        return done(null, user); // daca autentificarea e corecta, returneaza userul
     } catch (error) {
-        return done(error); //handle errors
+        return done(error); // gestioneaza erorile
     }
 }));
 
 passport.serializeUser((user, done) => {
-    //serialize the user ID into the session
+    // serializeaza id ul userului in sesiune
     done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-    //deserialize the user by their ID from the session
+    // deserializeaza id ul userului in sesiune
     try {
-        const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [id]); //query the database to retrieve the user by their ID
-        const user = rows[0]; //get the first matching user
-        done(null, user); //error == null
+        const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [id]); // interogheaza db pt a prelua userul dupa id
+        const user = rows[0]; // preia primul user gasit
+        done(null, user); // transmiterea userului (fara erori)
     } catch (error) {
-        done(error); //handle errors
+        done(error); // gestioneaza erorile
     }
 });
